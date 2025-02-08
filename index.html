@@ -66,7 +66,6 @@
             transform: translateX(-50%);
         }
 
-        /* 粒子背景 */
         #particles-js {
             position: absolute;
             width: 100%;
@@ -74,7 +73,6 @@
             z-index: -1;
         }
 
-        /* 音乐播放按钮 */
         #musicControl {
             position: absolute;
             bottom: 20px;
@@ -94,21 +92,13 @@
     </style>
 </head>
 <body>
-    <!-- 粒子特效背景 -->
     <div id="particles-js"></div>
-
-    <!-- 按钮 -->
     <button id="startButton" onclick="startExperience()">🌿 轻轻一点，诗意绽放 🌿</button>
-    
-    <!-- 滑动提示 -->
     <div id="swipeHint">👉 左右滑动，发现更多诗意 🌸</div>
-
-    <!-- 音乐控制按钮 -->
     <div id="musicControl" onclick="toggleMusic()">🎵</div>
     
-    <!-- 背景音乐 -->
     <audio id="bgMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-relaxing.mp3" type="audio/mp3">
+        <source src="assets/audio/Omar Akram - So Far.mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -121,33 +111,21 @@
         let currentIndex = 0;
 
         function startExperience() {
-            // 按钮消失
             document.getElementById("startButton").classList.add("hidden");
-
-            // 显示滑动提示
             document.getElementById("swipeHint").style.opacity = "1";
-
-            // 播放背景音乐
             document.getElementById("bgMusic").play();
-
-            // 获取在线诗歌
             fetchPoetry();
         }
 
         function fetchPoetry() {
-            fetch("https://v1.jinrishici.com/all.json") // 开源诗歌 API
+            fetch("https://v1.jinrishici.com/all.json")
                 .then(response => response.json())
                 .then(data => {
                     Swal.fire({
                         title: "🌸 诗意时光",
                         text: `${data.content} —— ${data.author}《${data.origin}》`,
                         confirmButtonText: "🌿 继续沉浸",
-                        background: "rgba(255, 255, 255, 0.85)",
-                        customClass: {
-                            popup: "rounded-lg",
-                            title: "text-lg text-gray-700",
-                            content: "text-md text-gray-600"
-                        }
+                        background: "rgba(255, 255, 255, 0.85)"
                     });
                 })
                 .catch(error => {
@@ -164,42 +142,6 @@
                 music.pause();
                 document.getElementById("musicControl").innerText = "🎵";
             }
-        }
-
-        // 监听滑动事件
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener("touchstart", (event) => {
-            touchStartX = event.touches[0].clientX;
-        });
-
-        document.addEventListener("touchend", (event) => {
-            touchEndX = event.changedTouches[0].clientX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                nextBackground();
-            } else if (touchEndX > touchStartX + 50) {
-                prevBackground();
-            }
-        }
-
-        function nextBackground() {
-            currentIndex = (currentIndex + 1) % backgrounds.length;
-            updateBackground();
-        }
-
-        function prevBackground() {
-            currentIndex = (currentIndex - 1 + backgrounds.length) % backgrounds.length;
-            updateBackground();
-        }
-
-        function updateBackground() {
-            document.body.style.backgroundImage = `url('${backgrounds[currentIndex].url}')`;
-            document.getElementById("swipeHint").innerText = backgrounds[currentIndex].text;
         }
     </script>
 </body>
