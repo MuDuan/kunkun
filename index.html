@@ -1,203 +1,318 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 诗意时光</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌸 诗意时光</title>
+  <script src="https://cdn.jsdelivr.net/npm/oh-my-live2d@0.19.3/dist/oh-my-live2d.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: "KaiTi", serif;
-            background: #E6DAF4; /* 淡紫色背景 */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            overflow: hidden;
-        }
+    body {
+      font-family: "KaiTi", serif;
+      background: #E6DAF4;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-        /* 顶部文本 */
-        #headerText {
-            font-size: 22px;
-            color: #6A4C93;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 12px 25px;
-            border-radius: 15px;
-            margin-top: 25px;
-            transition: opacity 1s ease-in-out;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-        }
+    #live2d-container {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      height: 400px;
+      z-index: 10;
+    }
 
-        /* 诗句部分 */
-        #poetryDisplay {
-            font-size: 24px;
-            color: #3B3B3B;
-            background: rgba(204, 255, 204, 0.9);
-            padding: 35px 50px;
-            border-radius: 18px;
-            text-align: left;
-            width: 80%; /* 设置宽度为屏幕的80% */
-            height: auto;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-            white-space: pre-wrap; /* 保留换行符 */
-            line-height: 1.6;
-        }
+    #headerText {
+      font-size: 22px;
+      color: #6A4C93;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 12px 25px;
+      border-radius: 15px;
+      margin-top: 25px;
+      transition: opacity 1s ease-in-out;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    }
 
-        /* 切换按钮 */
-        #changeButton {
-            position: absolute;
-            bottom: 120px;
-            background: #8A7BE2;
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-        }
+    #poetryDisplay {
+      font-size: 24px;
+      color: #3B3B3B;
+      background: rgba(204, 255, 204, 0.9);
+      padding: 35px 50px;
+      border-radius: 18px;
+      text-align: left;
+      width: 80%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
 
-        #changeButton:hover {
-            background: #0ABAB5; /* Tiffany Blue */
-            transform: scale(1.1);
-        }
+    #changeButton {
+      position: absolute;
+      bottom: 120px;
+      background: #8A7BE2;
+      color: white;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      animation: bounce 0.5s ease infinite;
+    }
 
-        /* 音乐按钮 */
-        #musicControl {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            background: #FF4C4C; /* Red background */
-            color: white;
-            padding: 12px;
-            border-radius: 50%;
-            font-size: 22px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
 
-        #musicControl:hover {
-            background: #D22C2C; /* Darker red when hovered */
-        }
+    #changeButton:hover {
+      background: #0ABAB5;
+      transform: scale(1.1);
+    }
 
-        @media (max-width: 768px) {
-            #poetryDisplay {
-                font-size: 20px;
-                width: 90%; /* 小屏幕上宽度为90% */
-                padding: 18px 25px;
-            }
+    #musicControl {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      background: #FF4C4C;
+      color: white;
+      padding: 12px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-            #changeButton {
-                bottom: 90px;
-                width: 60px;
-                height: 60px;
-                font-size: 26px;
-            }
+    #musicControl:hover {
+      background: #D22C2C;
+    }
 
-            #musicControl {
-                bottom: 15px;
-                right: 15px;
-                padding: 10px;
-                font-size: 18px;
-            }
-        }
-    </style>
+    .notes {
+      position: absolute;
+      font-size: 30px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-30px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4caf50;
+      border-radius: 50%;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      #poetryDisplay {
+        font-size: 20px;
+        width: 90%;
+        padding: 18px 25px;
+      }
+
+      #changeButton {
+        bottom: 90px;
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+      }
+
+      #musicControl {
+        bottom: 15px;
+        right: 15px;
+        padding: 10px;
+        font-size: 18px;
+      }
+
+      #live2d-container {
+        width: 150px;
+        height: 300px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- 顶部文本 -->
-    <div id="headerText">🌸 你是时光里最温柔的诗</div>
+  <div id="headerText">🌸 你是时光里最温柔的诗</div>
 
-    <!-- 诗句居中显示 -->
-    <div id="poetryDisplay"></div>
+  <div id="poetryDisplay"></div>
 
-    <!-- 切换诗句按钮 -->
-    <button id="changeButton" onclick="changePoetry()">🌿</button>
+  <button id="changeButton" onclick="changePoetry()">🌿</button>
 
-    <!-- 音乐控制 -->
-    <div id="musicControl" onclick="toggleMusic()">🎵</div>
+  <div id="musicControl" onclick="toggleMusic()">🎵</div>
 
-    <!-- 背景音乐 -->
-    <audio id="bgMusic" loop>
-        <source src="assets/audio/Omar Akram - So Far.mp3" type="audio/mp3">
-    </audio>
+  <div id="live2d-container"></div>
 
-    <script>
-        let texts = [
-            "🌸 你是时光里最温柔的诗",
-            "☀️ 风会吹散云朵，带不走你的温柔",
-            "🌿 一花一世界，一叶一菩提",
-            "🌊 生活如水，温柔而坚定"
-        ];
-        let textIndex = 0;
+  <audio id="bgMusic" loop>
+    <source id="musicSource" type="audio/mp3">
+  </audio>
 
-        // 顶部文本切换
-        function changeHeaderText() {
-            let headerText = document.getElementById("headerText");
-            headerText.style.opacity = "0";
+  <div id="loading" class="loading" style="display: none;"></div>
 
-            setTimeout(() => {
-                textIndex = (textIndex + 1) % texts.length;
-                headerText.innerHTML = texts[textIndex];
-                headerText.style.opacity = "1";
-            }, 1000);
-        }
+  <script>
+    let texts = [
+      "🌸 你是时光里最温柔的诗",
+      "☀️ 风会吹散云朵，带不走你的温柔",
+      "🌿 一花一世界，一叶一菩提",
+      "🌊 生活如水，温柔而坚定"
+    ];
+    let textIndex = 0;
 
-        // 每 1 分钟切换一次文本
-        setInterval(changeHeaderText, 60000);
+    // 可供随机播放的音乐列表
+    const musicList = [
+      "assets/audio/Omar Akram - So Far.mp3",
+      "assets/audio/George Winston - Variations On The Canon By Pachelbel.mp3",
+      "assets/audio/阿桑 - 一直很安静.mp3"
+    ];
 
-        // 切换诗句
-        function changePoetry() {
-            fetch("https://v1.jinrishici.com/all.json")
-                .then(response => response.json())
-                .then(data => {
-                    let poetryDisplay = document.getElementById("poetryDisplay");
-                    poetryDisplay.style.opacity = "0";
+    // 随机选择音乐
+    function randomMusic() {
+      const randomIndex = Math.floor(Math.random() * musicList.length);
+      const music = document.getElementById("bgMusic");
+      const musicSource = document.getElementById("musicSource");
+      musicSource.src = musicList[randomIndex]; // 设置音乐源
+      music.load(); // 重新加载音乐
+      music.play(); // 播放音乐
+    }
 
-                    setTimeout(() => {
-                        poetryDisplay.innerHTML = formatPoetry(data.content) + `<br>—— ${data.author}<br>《${data.origin}》`;
-                        poetryDisplay.style.opacity = "1";
-                    }, 1000);
-                })
-                .catch(error => {
-                    console.error("获取诗句失败", error);
-                });
-        }
+    function changePoetry() {
+      let button = document.getElementById("changeButton");
+      button.classList.add("bounce-effect");
+      setTimeout(() => button.classList.remove("bounce-effect"), 400);
 
-        function formatPoetry(content) {
-            // 确保根据标点符号自然换行
-            return content.replace(/([，。！？、；])/g, "$1\n");
-        }
+      // 显示加载动画
+      document.getElementById("loading").style.display = "block";
 
-        function toggleMusic() {
-            const music = document.getElementById("bgMusic");
-            if (music.paused) {
-                music.play();
-                document.getElementById("musicControl").innerText = "🔊";
-            } else {
-                music.pause();
-                document.getElementById("musicControl").innerText = "🎵";
-            }
-        }
+      fetch("https://v1.jinrishici.com/all.json")
+        .then(response => response.json())
+        .then(data => {
+          let poetryDisplay = document.getElementById("poetryDisplay");
+          poetryDisplay.style.opacity = "0";
+          poetryDisplay.classList.add("poetry-bounce");
 
-        // 页面加载时获取诗句
-        window.onload = changePoetry;
-    </script>
+          setTimeout(() => {
+            poetryDisplay.innerHTML = formatPoetry(data.content) + `<br>—— ${data.author}<br>《${data.origin}》`;
+            poetryDisplay.style.opacity = "1";
+            poetryDisplay.classList.remove("poetry-bounce");
+
+            // 隐藏加载动画
+            document.getElementById("loading").style.display = "none";
+          }, 1000);
+        })
+        .catch(error => {
+          console.error("获取诗句失败", error);
+          // 隐藏加载动画
+          document.getElementById("loading").style.display = "none";
+        });
+    }
+
+    function formatPoetry(content) {
+      return content.replace(/([，。！？、；])/g, "$1\n");
+    }
+
+    function toggleMusic() {
+      const music = document.getElementById("bgMusic");
+      if (music.paused) {
+        music.play();
+        document.getElementById("musicControl").innerText = "🔊";
+        showNotes(); // 显示音符
+      } else {
+        music.pause();
+        document.getElementById("musicControl").innerText = "🎵";
+        hideNotes(); // 隐藏音符
+      }
+    }
+
+    function showNotes() {
+      const notesContainer = document.createElement("div");
+      notesContainer.className = "notes";
+      notesContainer.innerText = "🎹 🎶";
+
+      // 获取音乐按钮的位置信息
+      const musicButton = document.getElementById("musicControl");
+      const musicButtonRect = musicButton.getBoundingClientRect();
+
+      // 随机化音符位置
+      const randomX = Math.random() * (musicButtonRect.width - 40) + musicButtonRect.left;
+      const randomY = musicButtonRect.top - 40; // 音符位于按钮上方 5px
+
+      notesContainer.style.left = `${randomX}px`;
+      notesContainer.style.top = `${randomY}px`;
+
+      document.body.appendChild(notesContainer);
+    }
+
+    function hideNotes() {
+      const notes = document.querySelectorAll(".notes");
+      notes.forEach(note => note.remove());
+    }
+
+    window.onload = () => {
+      randomMusic(); // 页面加载时开始随机播放音乐
+      changePoetry(); // 页面加载时获取诗句
+
+      // 初始化Live2D
+      const model = new window.OhMyLive2D({
+        model: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json',
+        container: document.getElementById('live2d-container'),
+        position: 'left',
+        scale: 0.15,
+        mobile: true,
+        mobilePosition: [-10, 23],
+        mobileScale: 0.1,
+        mobileStageStyle: { width: 180, height: 166 },
+        stageStyle: { width: 250, height: 250 },
+        idleTips: { interval: 15000, message: '你好呀~' },
+        primaryColor: 'var(--btn-bg)',
+        menus: []
+      });
+
+      model.load();
+    };
+  </script>
 </body>
 </html>
