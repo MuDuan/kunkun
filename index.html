@@ -4,17 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌸 诗意时光</title>
-  <script src="https://cdn.jsdelivr.net/npm/oh-my-live2d@0.19.3/dist/oh-my-live2d.min.js"></script>
   <style>
+    /* 全局样式重置 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    /* 页面整体样式 */
     body {
-      font-family: "KaiTi", serif;
-      background: #E6DAF4;
+      font-family: "KaiTi", serif; /* 使用楷体字体 */
+      background: linear-gradient(45deg, #d6a4e8, #b6d7f7); /* 渐变背景 */
+      background-size: 400% 400%; /* 背景动画效果 */
+      animation: gradientAnimation 10s ease infinite; /* 背景渐变动画 */
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -25,47 +28,53 @@
       position: relative;
     }
 
-    #live2d-container {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 200px;
-      height: 400px;
-      z-index: 10;
+    /* 背景渐变动画 */
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
+    /* 顶部标题样式 */
     #headerText {
       font-size: 22px;
       color: #6A4C93;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.85); /* 半透明背景 */
       padding: 12px 25px;
       border-radius: 15px;
       margin-top: 25px;
-      transition: opacity 1s ease-in-out;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+      transition: opacity 1s ease-in-out; /* 淡入淡出效果 */
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); /* 阴影效果 */
     }
 
+    /* 诗句显示区域样式 */
     #poetryDisplay {
       font-size: 24px;
       color: #3B3B3B;
-      background: rgba(204, 255, 204, 0.9);
+      background: rgba(204, 255, 204, 0.9); /* 半透明背景 */
       padding: 35px 50px;
       border-radius: 18px;
       text-align: left;
       width: 80%;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
+      opacity: 0; /* 初始透明度为0 */
+      transition: opacity 1s ease-in-out; /* 淡入淡出效果 */
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-weight: bold;
-      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-      white-space: pre-wrap;
-      line-height: 1.6;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15); /* 阴影效果 */
+      white-space: pre-wrap; /* 保留换行符 */
+      line-height: 1.6; /* 行高 */
     }
 
+    /* 切换诗句按钮样式 */
     #changeButton {
       position: absolute;
       bottom: 120px;
@@ -73,14 +82,16 @@
       color: white;
       width: 70px;
       height: 70px;
-      border-radius: 50%;
+      border-radius: 50%; /* 圆形按钮 */
       border: none;
       font-size: 28px;
       cursor: pointer;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-      animation: bounce 0.5s ease infinite;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+      animation: bounce 0.5s ease infinite; /* 弹跳动画 */
+      z-index: 15;
     }
 
+    /* 弹跳动画 */
     @keyframes bounce {
       0%, 100% {
         transform: translateY(0);
@@ -90,11 +101,13 @@
       }
     }
 
+    /* 按钮悬停效果 */
     #changeButton:hover {
       background: #0ABAB5;
-      transform: scale(1.1);
+      transform: scale(1.1); /* 放大效果 */
     }
 
+    /* 音乐控制按钮样式 */
     #musicControl {
       position: absolute;
       bottom: 30px;
@@ -102,22 +115,48 @@
       background: #FF4C4C;
       color: white;
       padding: 12px;
-      border-radius: 50%;
-      font-size: 22px;
+      border-radius: 50%; /* 圆形按钮 */
+      font-size: 28px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s; /* 背景色过渡效果 */
+      z-index: 15;
     }
 
+    /* 音乐控制按钮悬停效果 */
     #musicControl:hover {
       background: #D22C2C;
     }
 
+    /* 音乐切换按钮样式 */
+    #songSwitch {
+	  position: absolute;
+	  bottom: 95px; /* 调整到音乐按钮的正上方 */
+	  right: 30px; /* 与音乐按钮的 right 值一致 */
+	  background: transparent; /* 去掉白色背景 */
+	  color: #ffffff;
+	  width: 50px;
+	  height: 50px;
+	  border-radius: 50%;
+	  font-size: 24px;
+	  display: none; /* 初始隐藏 */
+	  cursor: pointer;
+	  z-index: 10;
+	  transition: background 0.3s;
+    }
+
+    /* 音乐切换按钮悬停效果 */
+    #songSwitch:hover {
+      background: rgba(255, 255, 255, 0.2); /* 轻微高亮 */
+    }
+
+    /* 音符动画样式 */
     .notes {
       position: absolute;
       font-size: 30px;
-      animation: float 2s ease-in-out infinite;
+      animation: float 2s ease-in-out infinite; /* 浮动动画 */
     }
 
+    /* 音符浮动动画 */
     @keyframes float {
       0% {
         transform: translateY(0);
@@ -130,6 +169,7 @@
       }
     }
 
+    /* 加载动画样式 */
     .loading {
       position: absolute;
       top: 50%;
@@ -139,15 +179,17 @@
       height: 40px;
       border: 4px solid #f3f3f3;
       border-top: 4px solid #4caf50;
-      border-radius: 50%;
-      animation: spin 2s linear infinite;
+      border-radius: 50%; /* 圆形加载动画 */
+      animation: spin 2s linear infinite; /* 旋转动画 */
     }
 
+    /* 旋转动画 */
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
+    /* 移动端适配 */
     @media (max-width: 768px) {
       #poetryDisplay {
         font-size: 20px;
@@ -168,32 +210,35 @@
         padding: 10px;
         font-size: 18px;
       }
-
-      #live2d-container {
-        width: 150px;
-        height: 300px;
-      }
     }
   </style>
 </head>
 <body>
+  <!-- 顶部标题 -->
   <div id="headerText">🌸 你是时光里最温柔的诗</div>
 
+  <!-- 诗句显示区域 -->
   <div id="poetryDisplay"></div>
 
+  <!-- 切换诗句按钮 -->
   <button id="changeButton" onclick="changePoetry()">🌿</button>
 
+  <!-- 音乐切换按钮 -->
+  <div id="songSwitch" onclick="changeMusic()">🔄</div>
+
+  <!-- 音乐控制按钮 -->
   <div id="musicControl" onclick="toggleMusic()">🎵</div>
 
-  <div id="live2d-container"></div>
-
+  <!-- 背景音乐 -->
   <audio id="bgMusic" loop>
     <source id="musicSource" type="audio/mp3">
   </audio>
 
+  <!-- 加载动画 -->
   <div id="loading" class="loading" style="display: none;"></div>
 
   <script>
+    // 预定义的诗句列表
     let texts = [
       "🌸 你是时光里最温柔的诗",
       "☀️ 风会吹散云朵，带不走你的温柔",
@@ -208,17 +253,22 @@
       "assets/audio/George Winston - Variations On The Canon By Pachelbel.mp3",
       "assets/audio/阿桑 - 一直很安静.mp3"
     ];
+    let currentMusicIndex = 0;
 
-    // 随机选择音乐
-    function randomMusic() {
-      const randomIndex = Math.floor(Math.random() * musicList.length);
+    // 切换音乐
+    function changeMusic() {
+      currentMusicIndex = (currentMusicIndex + 1) % musicList.length;
       const music = document.getElementById("bgMusic");
       const musicSource = document.getElementById("musicSource");
-      musicSource.src = musicList[randomIndex]; // 设置音乐源
-      music.load(); // 重新加载音乐
-      music.play(); // 播放音乐
+      musicSource.src = musicList[currentMusicIndex]; // 设置新的音乐源
+      music.load(); // 重新加载新的音乐
+      music.play(); // 播放新的音乐
+      document.getElementById("musicControl").style.transform = "rotate(360deg)";
+      document.getElementById("songSwitch").style.display = "none"; // 隐藏切换按钮
+      document.getElementById("musicControl").innerText = "⏸️";
     }
 
+    // 切换诗句
     function changePoetry() {
       let button = document.getElementById("changeButton");
       button.classList.add("bounce-effect");
@@ -227,6 +277,7 @@
       // 显示加载动画
       document.getElementById("loading").style.display = "block";
 
+      // 从 API 获取诗句
       fetch("https://v1.jinrishici.com/all.json")
         .then(response => response.json())
         .then(data => {
@@ -250,68 +301,33 @@
         });
     }
 
+    // 格式化诗句（添加换行符）
     function formatPoetry(content) {
       return content.replace(/([，。！？、；])/g, "$1\n");
     }
 
-    function toggleMusic() {
-      const music = document.getElementById("bgMusic");
-      if (music.paused) {
-        music.play();
-        document.getElementById("musicControl").innerText = "🔊";
-        showNotes(); // 显示音符
-      } else {
-        music.pause();
-        document.getElementById("musicControl").innerText = "🎵";
-        hideNotes(); // 隐藏音符
-      }
-    }
+    // 切换音乐播放状态
+	function toggleMusic() {
+	  const music = document.getElementById("bgMusic");
+	  if (music.paused) {
+		music.play();
+		document.getElementById("musicControl").innerText = "⏸️";
+		document.getElementById("musicControl").style.transform = "rotate(360deg)";
+		document.getElementById("songSwitch").style.display = "inline-block"; // 显示切换按钮
+		document.getElementById("songSwitch").style.bottom = "95px"; // 确保切换按钮在播放按钮正上方
+		document.getElementById("songSwitch").style.right = "30px"; // 与播放按钮的 right 值一致
+	  } else {
+		music.pause();
+		document.getElementById("musicControl").innerText = "🎵";
+		document.getElementById("musicControl").style.transform = "rotate(0deg)";
+		document.getElementById("songSwitch").style.display = "none"; // 隐藏切换按钮
+	  }
+	}
 
-    function showNotes() {
-      const notesContainer = document.createElement("div");
-      notesContainer.className = "notes";
-      notesContainer.innerText = "🎹 🎶";
-
-      // 获取音乐按钮的位置信息
-      const musicButton = document.getElementById("musicControl");
-      const musicButtonRect = musicButton.getBoundingClientRect();
-
-      // 随机化音符位置
-      const randomX = Math.random() * (musicButtonRect.width - 40) + musicButtonRect.left;
-      const randomY = musicButtonRect.top - 40; // 音符位于按钮上方 5px
-
-      notesContainer.style.left = `${randomX}px`;
-      notesContainer.style.top = `${randomY}px`;
-
-      document.body.appendChild(notesContainer);
-    }
-
-    function hideNotes() {
-      const notes = document.querySelectorAll(".notes");
-      notes.forEach(note => note.remove());
-    }
-
+    // 页面加载时初始化
     window.onload = () => {
-      randomMusic(); // 页面加载时开始随机播放音乐
+      changeMusic(); // 页面加载时开始播放音乐
       changePoetry(); // 页面加载时获取诗句
-
-      // 初始化Live2D
-      const model = new window.OhMyLive2D({
-        model: 'https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json',
-        container: document.getElementById('live2d-container'),
-        position: 'left',
-        scale: 0.15,
-        mobile: true,
-        mobilePosition: [-10, 23],
-        mobileScale: 0.1,
-        mobileStageStyle: { width: 180, height: 166 },
-        stageStyle: { width: 250, height: 250 },
-        idleTips: { interval: 15000, message: '你好呀~' },
-        primaryColor: 'var(--btn-bg)',
-        menus: []
-      });
-
-      model.load();
     };
   </script>
 </body>
